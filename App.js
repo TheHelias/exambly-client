@@ -38,8 +38,7 @@ export default function App () {
                   alert(res.message)
                 } else {
                   alert(
-                    'Please ensure you inputed appropriate values in each field and ensure password is up to 8 characters'
-                  )
+                    JSON.stringify(res))
                 }
               })
           }}
