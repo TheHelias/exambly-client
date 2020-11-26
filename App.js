@@ -7,7 +7,8 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  View
+  View,
+  ScrollView
 } from 'react-native'
 
 import logo from './assets/logo.jpg'
@@ -16,13 +17,13 @@ export default function App () {
   return (
     <View style={styles.container}>
       <View style={styles.appBar} />
-      <View style={styles.appContainer}>
+      <ScrollView style={styles.appContainer}>
         <Image style={styles.logo} resizeMode='contain' source={logo} />
         <Text style={styles.signUpHeader1stLine}>Proceed with your</Text>
         <Text style={styles.signUpHeader2ndLine}>Signup</Text>
         <Formik
           initialValues={{ email: '', name: '', phone_no: '', password: '' }}
-          onSubmit={(values) => {
+          onSubmit={(values, { setSubmitting }) => {
             fetch('https://exambly-api.herokuapp.com/api/user/create', {
               headers: {
                 'Content-Type': 'application/json'
@@ -40,10 +41,10 @@ export default function App () {
                   alert(
                     JSON.stringify(res))
                 }
-              })
+              }).finally(() => setSubmitting(false))
           }}
         >
-          {({ handleChange, handleBlur, handleSubmit, values }) => (
+          {({ handleChange, handleBlur, handleSubmit, values, isSubmitting }) => (
             <View>
               <Text style={styles.label}>Full Name</Text>
               <TextInput
@@ -77,8 +78,8 @@ export default function App () {
                 textContentType='password'
                 value={values.password}
               />
-              <Pressable style={styles.button} onPress={handleSubmit}>
-                <Text style={styles.buttonText}>CREATE ACCOUNT</Text>
+              <Pressable disabled={isSubmitting} style={styles.button} onPress={handleSubmit}>
+                <Text style={styles.buttonText}>{isSubmitting ? 'Creating...' : 'CREATE ACCOUNT'}</Text>
               </Pressable>
               <Text style={styles.label}>
                 Already have an account? Click to login
@@ -86,7 +87,7 @@ export default function App () {
             </View>
           )}
         </Formik>
-      </View>
+      </ScrollView>
       <StatusBar
         backgroundColor='#a9a9a9'
         barStyle='dark-content'
