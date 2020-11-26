@@ -37,9 +37,11 @@ export default function App () {
                   alert(res.error)
                 } else if (res.message) {
                   alert(res.message)
+                } else if (res.errors) {
+                  console.log(res)
+                  alert(res.errors.map(item => `${item.msg}\n`))
                 } else {
-                  alert(
-                    JSON.stringify(res))
+                  alert('Something went wrong, please retry')
                 }
               }).finally(() => setSubmitting(false))
           }}
